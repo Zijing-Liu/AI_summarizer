@@ -1,7 +1,18 @@
 import { useEffect } from "react";
 import { copy, linkIcon, loader, tick } from "../assets";
 import { GrReturn } from "react-icons/gr";
+import { useState } from "react";
+
 const Demo = () => {
+  const [article, setArticle] = useState({
+    url: "",
+    summary: "",
+  });
+
+  const handleSubmit = async (e) => {
+    alert("submited");
+  };
+
   return (
     <section className="mt-16 w-full max-w-xl">
       {/** search */}
@@ -11,7 +22,7 @@ const Demo = () => {
           className="relative flex justify-center items-center"
           action="/"
           method="post"
-          onSubmit={() => {}}
+          onSubmit={handleSubmit}
         >
           <img
             src={linkIcon}
@@ -20,9 +31,12 @@ const Demo = () => {
           />
           <input
             type="url"
-            placeholder="Enter a url"
-            onChange={() => {}}
             className="url_input peer"
+            placeholder="Enter a url"
+            value={article.url}
+            onChange={(e) => {
+              setArticle({ ...article, url: e.target.value });
+            }}
           />
           <button
             type="submit"
