@@ -10,9 +10,12 @@ const Demo = () => {
   });
 
   const [allArticles, setAllArticles] = useState([]);
+  const [copied, setCopied] = useState("");
+
   // RTK lazy query
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
 
+  // Load data from localStorage on mount
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
       localStorage.getItem("articles")
@@ -33,6 +36,13 @@ const Demo = () => {
       setAllArticles(updatedAllArticles);
       localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
     }
+  };
+
+  // copy the url and toggle the icon for user feedback
+  const handleCopy = (copyUrl) => {
+    setCopied(copyUrl);
+    navigator.clipboard.writeText(copyUrl);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   return (
@@ -63,6 +73,7 @@ const Demo = () => {
           <button
             type="submit"
             className="submit_btn
+ 
             peer-focus:border-gray-700
             peer-focus:text-gray-700"
           >
@@ -78,9 +89,9 @@ const Demo = () => {
               onClick={() => setArticle(item)}
               className="link_card"
             >
-              <div className="copy_btn">
+              <div className="copy_btn" onClick={() => handleCopy(item.url)}>
                 <img
-                  src={copy}
+                  src={copied === item.url ? tick : copy}
                   alt="copy_icon"
                   className="w-[40%] h-[40%] object-contain"
                 />
